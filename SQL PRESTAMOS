@@ -1,0 +1,80 @@
+-- Creación de la base de datos
+CREATE DATABASE Prestamos;
+GO
+
+-- Uso de la base de datos
+USE Prestamos;
+GO
+
+-- Creación de la tabla Clientes
+CREATE TABLE Clientes (
+    Id_cliente INT PRIMARY KEY,
+    Nombre_cliente VARCHAR(50) NOT NULL,
+    Direccion VARCHAR(80) NOT NULL,
+    Estado_civil VARCHAR(50) NOT NULL,
+    Telefono VARCHAR(11) NOT NULL,
+    Correo_electronico VARCHAR(80) NOT NULL,
+    Sexo CHAR(1) NOT NULL
+);
+GO
+
+-- Creación de la tabla Tipos_Prestamos
+CREATE TABLE Tipos_Prestamos (
+    Id_tipo INT PRIMARY KEY,
+    Descripcion VARCHAR(50) NOT NULL,
+    Tasa_Interes MONEY NOT NULL
+);
+GO
+
+-- Creación de la tabla Prestamos
+CREATE TABLE Prestamos (
+    Id_prestamo INT PRIMARY KEY,
+    Id_Cliente INT NOT NULL,
+    Id_tipo INT NOT NULL,
+    Monto_Prestamo MONEY NOT NULL,
+    Saldo_Actual MONEY NOT NULL,
+    Amortizado MONEY NOT NULL,
+    Estado_prestamo CHAR(1) NOT NULL,
+    FOREIGN KEY (Id_Cliente) REFERENCES Clientes(Id_cliente),
+    FOREIGN KEY (Id_tipo) REFERENCES Tipos_Prestamos(Id_tipo)
+);
+GO
+
+-- Inserción de registros en Clientes
+INSERT INTO Clientes VALUES (1, 'Erick Solano', 'Cartago Centro', 'Soltero', '88884444', 'erick@mail.com', 'M');
+INSERT INTO Clientes VALUES (2, 'María Rodríguez', 'San José', 'Casada', '88995566', 'maria@mail.com', 'F');
+INSERT INTO Clientes VALUES (3, 'Esteban López', 'Heredia', 'Divorciado', '87776655', 'esteban@mail.com', 'M');
+GO
+
+-- Inserción de registros en Tipos_Prestamos
+INSERT INTO Tipos_Prestamos VALUES (1, 'Hipotecario', 6.5);
+INSERT INTO Tipos_Prestamos VALUES (2, 'Personal', 9.0);
+INSERT INTO Tipos_Prestamos VALUES (3, 'Vehicular', 7.2);
+GO
+
+-- Inserción de registros en Prestamos
+INSERT INTO Prestamos VALUES (1, 1, 1, 10000, 2000, 8000, 'A');
+INSERT INTO Prestamos VALUES (2, 2, 2, 5000, 500, 4500, 'A');
+INSERT INTO Prestamos VALUES (3, 3, 3, 15000, 12000, 3000, 'I');
+GO
+
+-- Consultas solicitadas
+-- 1. Todos los clientes cuyo sexo sea igual a 'M'
+SELECT * FROM Clientes WHERE Sexo = 'M';
+GO
+
+-- 2. Los prestamos cuyo saldo sea mayor a 1000
+SELECT * FROM Prestamos WHERE Saldo_Actual > 1000;
+GO
+
+-- 3. Todos los tipos de prestamos
+SELECT * FROM Tipos_Prestamos;
+GO
+
+-- 4. Los clientes que inicien con la letra 'E'
+SELECT * FROM Clientes WHERE Nombre_cliente LIKE 'E%';
+GO
+
+-- 5. La suma de todos los saldos actuales de la tabla prestamos
+SELECT SUM(Saldo_Actual) AS Suma_Saldos_Actuales FROM Prestamos;
+GO
